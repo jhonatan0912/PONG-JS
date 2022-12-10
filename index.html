@@ -1,0 +1,163 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pong</title>
+    <style>
+        body{
+            background-color: #3a3a3a;
+            color: #fff;    
+            text-align: center;      
+        }
+        #pong-layout{
+            background:#1a1a1a;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div>
+        <header>
+            <h1>JS PONG:</h1>
+        </header>
+        <article>
+            <canvas id="pong-layout" width="600" height="500">
+
+            </canvas>
+        </article>
+    </div>
+    <script>
+
+        var player1Puntuation=0;
+        var player2Puntuation=0;
+        var height=500;
+        var width=600;
+        var stepX=10;
+        var stepY=10;
+
+        var layout = document.getElementById('pong-layout');
+        var ctx = layout.getContext('2d');
+
+        var fps=20;
+        var player1 = {
+            x: 0,
+            y: 0,
+            width: 20,
+            height: 80,
+            color: '#f00'
+        };
+        var player2 = {
+            x: 580,
+            y: 420,
+            width: 20,
+            height: 80,
+            color: '#00f'
+        };
+        var ball = {
+
+            x: 290,
+            y: 240,
+            width: 20,
+            height: 20,
+            color: '#0f0'
+        };
+
+        var loop = setInterval(function(){
+            moveBall();
+            draw();
+        },1000/fps);
+
+        //capturar los eventos de teclado
+
+        document.onkeydown=function(event){
+            console.log(event);
+            switch(event.code){
+                case'KeyW':
+                    player1.y=player1.y - 10;
+                break;
+                case'KeyS':
+                    player1.y=player1.y + 10;
+                break;
+                case'ArrowDown':
+                    player2.y=player2.y + 10;
+                break;
+                case'ArrowUp':
+                    player2.y=player2.y - 10;
+                break;
+            }
+        };
+
+        function draw(){
+            //limpiar
+            ctx.fillStyle='#1a1a1a';
+            ctx.fillRect(0,0,600,500);
+             // dibujar player 1
+            ctx.fillStyle = player1.color;
+            ctx.fillRect(player1.x,player1.y,
+                        player1.width,player1.height);
+            // dibujar player 2
+            ctx.fillStyle = player2.color;
+            ctx.fillRect(player2.x,player2.y,
+                        player2.width,player2.height);  
+            //dibujamos el balon
+            ctx.fillStyle = ball.color;
+            ctx.fillRect(ball.x,ball.y,
+                        ball.width,ball.height);
+            //dibujamos la puntuacion
+            ctx.fillStyle='#fff';
+            ctx.font="30px Arial";
+            ctx.fillText(player1Puntuation,height/4,50);
+            ctx.fillText(player2Puntuation,height/4*3,50);          
+        }
+        function moveBall(){
+            
+            //restringir abajo
+            if(ball.y >=height - ball.height){
+                stepY = stepY * -1;
+            }
+            //restringir arriba
+            if(ball.y <= 0){
+                stepY = stepY * -1;
+            }
+            //verificar barra derecha
+            if(ball.x >= width - player2.width - ball.width){
+                if(ball.y >= player2.y && ball.y <= player2.y+player2.height){
+                    //choca
+                    stepX=stepX*-1;
+                }else{
+                    //no choca
+                }
+            }
+            //verificar barra izquierda
+            if(ball.x <= 0 + player1.width){
+                if(ball.y >= player1.y && ball.y <= player1.y+player1.height){
+                    //choca
+                    stepX=stepX*-1;
+                }else{
+                    //no choca
+                }
+            }
+            //restringir derecha
+            if(ball.x >=width - ball.width){
+                stepX = stepX * -1;
+                player1Puntuation+=1;
+            }
+            //restringir izquierda
+            if(ball.x <= 0){
+                stepX = stepX * -1;
+                player2Puntuation+=1;
+            }
+            ball.x=ball.x+stepX;
+            ball.y=ball.y+stepY;
+
+
+        }
+
+
+        
+
+    </script>
+</body>
+</html>
