@@ -1,8 +1,9 @@
 # PONG-JS
-Simple pong game for 2 players
+Simple pong game
 ___
 Technologies
 * HTML
 * CSS
 * JAVASCRIPT
-
+___
+![image pong](./assets/docs/image.png)
